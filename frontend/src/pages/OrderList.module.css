@@ -1,0 +1,202 @@
+.orderListContainer {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ── Header row ──────────────────────────────── */
+.orderListHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.orderListHeader h2 {
+  margin: 0 0 0.25rem 0;
+  color: #2c3e50;
+  font-size: 1.6rem;
+}
+
+.orderCount {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.btnCreateOrder {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #3498db;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.btnCreateOrder:hover {
+  background-color: #2980b9;
+}
+
+/* ── Filter bar ──────────────────────────────── */
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.filterBar label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  white-space: nowrap;
+}
+
+.filterSelect {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.18);
+}
+
+/* ── States ──────────────────────────────────── */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1rem;
+  color: #e74c3c;
+  background-color: #fadbd8;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.retryBtn {
+  padding: 0.5rem 1.1rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.retryBtn:hover {
+  opacity: 0.85;
+}
+
+.noOrders {
+  text-align: center;
+  padding: 3rem 2rem;
+  font-size: 1rem;
+  color: #7f8c8d;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  border: 2px dashed #dee2e6;
+}
+
+.noOrders p {
+  margin: 0.4rem 0;
+}
+
+.noOrders a {
+  color: #3498db;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.noOrders a:hover {
+  text-decoration: underline;
+}
+
+/* ── Pagination ──────────────────────────────── */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.pageBtnActive {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+  font-weight: 700;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 540px) {
+  .orderListHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .btnCreateOrder {
+    width: 100%;
+    text-align: center;
+  }
+
+  .filterBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filterSelect {
+    width: 100%;
+  }
+}

@@ -1,0 +1,108 @@
+.authContainer {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.authTitle {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.formGroup input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.submitBtn {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitBtn:hover {
+  background-color: #2980b9;
+}
+
+.submitBtn:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  color: #e74c3c;
+  background-color: #fadbd8;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.successMessage {
+  color: #27ae60;
+  background-color: #d5f5e3;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.switchText {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.switchText a {
+  color: #3498db;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.switchText a:hover {
+  text-decoration: underline;
+}
+
+/* Red asterisk for required fields */
+.required {
+  color: #e74c3c;
+  margin-left: 2px;
+}

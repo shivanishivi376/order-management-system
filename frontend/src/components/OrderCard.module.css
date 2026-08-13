@@ -1,0 +1,92 @@
+.orderCard {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.orderCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Product image thumbnail */
+.orderImageWrapper {
+  flex-shrink: 0;
+}
+
+.orderImage {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+/* Order details */
+.orderInfo {
+  flex: 1;
+}
+
+.orderInfo h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+}
+
+.orderInfo p {
+  margin: 0.25rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Status badge */
+.orderStatus {
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.statusPending   { background-color: #f39c12; color: white; }
+.statusShipped   { background-color: #3498db; color: white; }
+.statusDelivered { background-color: #2ecc71; color: white; }
+.statusCancelled { background-color: #e74c3c; color: white; }
+
+/* Action buttons */
+.orderActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btnEdit,
+.btnDelete {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.btnEdit:hover,
+.btnDelete:hover {
+  opacity: 0.8;
+}
+
+.btnEdit {
+  background-color: #f1c40f;
+  color: #333;
+}
+
+.btnDelete {
+  background-color: #e74c3c;
+  color: white;
+}

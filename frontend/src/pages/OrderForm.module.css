@@ -1,0 +1,224 @@
+.orderFormContainer {
+  max-width: 620px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.orderFormCard {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem 2.5rem;
+}
+
+/* ── Header ─────────────────────────────────── */
+.orderFormHeader {
+  margin-bottom: 1.75rem;
+}
+
+.orderFormHeader h2 {
+  margin: 0 0 0.35rem 0;
+  color: #2c3e50;
+  font-size: 1.5rem;
+}
+
+.orderFormSubtitle {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* ── Error banner ────────────────────────────── */
+.formErrorBanner {
+  background-color: #fadbd8;
+  color: #e74c3c;
+  border: 1px solid #f1948a;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+}
+
+/* ── Form layout ─────────────────────────────── */
+.orderForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Individual field ────────────────────────── */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.formGroup label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #444;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.97rem;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.18);
+}
+
+.inputError {
+  border-color: #e74c3c !important;
+}
+
+.inputError:focus {
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.18) !important;
+}
+
+.formGroup select:disabled {
+  background-color: #f4f6f8;
+  cursor: not-allowed;
+  color: #888;
+}
+
+/* ── Inline errors / hints ───────────────────── */
+.fieldError {
+  color: #e74c3c;
+  font-size: 0.82rem;
+}
+
+.fieldHint {
+  color: #7f8c8d;
+  font-size: 0.82rem;
+}
+
+/* Red asterisk on required field labels */
+.required {
+  color: #e74c3c;
+  margin-left: 2px;
+}
+
+/* Small note under the form header */
+.requiredNote {
+  margin: 0.4rem 0 0 0;
+  font-size: 0.82rem;
+  color: #7f8c8d;
+}
+
+/* ── File input ──────────────────────────────── */
+.fileInput {
+  padding: 0.4rem 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* ── Image preview ───────────────────────────── */
+.imagePreviewWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.imagePreview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid #ddd;
+}
+
+.removeImageBtn {
+  background: none;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.removeImageBtn:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* ── Action buttons ──────────────────────────── */
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.btnCancel,
+.btnSubmit {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.97rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.btnCancel {
+  background-color: #ecf0f1;
+  color: #555;
+}
+
+.btnCancel:hover {
+  background-color: #d5dbdb;
+}
+
+.btnSubmit {
+  background-color: #3498db;
+  color: white;
+  min-width: 130px;
+}
+
+.btnSubmit:hover {
+  background-color: #2980b9;
+}
+
+.btnSubmit:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* ── Loading state ───────────────────────────── */
+.formLoading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
