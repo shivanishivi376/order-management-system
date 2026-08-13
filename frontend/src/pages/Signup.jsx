@@ -24,8 +24,8 @@ const Signup = () => {
 
     try {
       const response = await axiosInstance.post('/auth/signup', formData);
-      // Backend now returns both user + token on signup
-      // Auto-login: save credentials to Redux + localStorage and go straight to orders
+      // Auto-login: backend returns token on signup, save it and go straight to orders
+      // User sees the full app (navbar, orders) immediately — no separate login step
       dispatch(setCredentials({
         user: response.data.user,
         token: response.data.token,

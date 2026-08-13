@@ -2,10 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosInstance';
 
 // ─────────────────────────────────────────────
-// Async Thunks  (each one talks to the backend)
+// Async Thunks
 // ─────────────────────────────────────────────
 
-// Fetch the current user's orders (supports page, limit, status filter)
 export const fetchOrders = createAsyncThunk(
   'orders/fetchOrders',
   async ({ page = 1, limit = 5, status = '' } = {}, { rejectWithValue }) => {
@@ -13,14 +12,13 @@ export const fetchOrders = createAsyncThunk(
       const params = { page, limit };
       if (status) params.status = status;
       const response = await axiosInstance.get('/orders', { params });
-      return response.data; // { orders, totalPages, currentPage, totalOrders }
+      return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to fetch orders');
     }
   }
 );
 
-// Fetch a single order by ID (used to pre-populate the edit form)
 export const fetchOrderById = createAsyncThunk(
   'orders/fetchOrderById',
   async (orderId, { rejectWithValue }) => {
@@ -33,7 +31,6 @@ export const fetchOrderById = createAsyncThunk(
   }
 );
 
-// Create a new order  (FormData because the backend uses multer for image upload)
 export const createOrder = createAsyncThunk(
   'orders/createOrder',
   async (formData, { rejectWithValue }) => {
@@ -48,7 +45,6 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-// Update an existing order  (also multipart/form-data for possible image swap)
 export const updateOrder = createAsyncThunk(
   'orders/updateOrder',
   async ({ orderId, formData }, { rejectWithValue }) => {
@@ -63,13 +59,12 @@ export const updateOrder = createAsyncThunk(
   }
 );
 
-// Delete an order
 export const deleteOrder = createAsyncThunk(
   'orders/deleteOrder',
   async (orderId, { rejectWithValue }) => {
     try {
       await axiosInstance.delete(`/orders/${orderId}`);
-      return orderId; // Return the ID so we can remove it from state
+      return orderId;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to delete order');
     }
@@ -83,34 +78,31 @@ export const deleteOrder = createAsyncThunk(
 const orderSlice = createSlice({
   name: 'orders',
   initialState: {
-    orders: [],          // array of orders shown on the list page
-    currentOrder: null,  // single order loaded for the edit form
+    orders: [],
+    currentOrder: null,
     loading: false,
-    formLoading: false,  // separate loading flag for the form submit button
+    formLoading: false,
     error: null,
-    formError: null,     // error shown inside the form
+    formError: null,
     totalPages: 1,
     currentPage: 1,
     totalOrders: 0,
-    statusFilter: '',    // currently active status filter
+    statusFilter: '',
   },
   reducers: {
-    // Let the OrderList page change the status filter and reset to page 1
     setStatusFilter: (state, action) => {
       state.statusFilter = action.payload;
     },
-    // Clear the single order when leaving the edit form
     clearCurrentOrder: (state) => {
       state.currentOrder = null;
       state.formError = null;
     },
-    // Clear any list-level error (e.g. when user retries)
     clearError: (state) => {
       state.error = null;
     },
   },
   extraReducers: (builder) => {
-    // ── fetchOrders ──────────────────────────
+    // fetchOrders
     builder
       .addCase(fetchOrders.pending, (state) => {
         state.loading = true;
@@ -128,7 +120,7 @@ const orderSlice = createSlice({
         state.error = action.payload;
       });
 
-    // ── fetchOrderById ───────────────────────
+    // fetchOrderById
     builder
       .addCase(fetchOrderById.pending, (state) => {
         state.formLoading = true;
@@ -144,7 +136,7 @@ const orderSlice = createSlice({
         state.formError = action.payload;
       });
 
-    // ── createOrder ──────────────────────────
+    // createOrder
     builder
       .addCase(createOrder.pending, (state) => {
         state.formLoading = true;
@@ -152,15 +144,13 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state) => {
         state.formLoading = false;
-        // Don't manually insert into the list here — the user will be
-        // redirected to /orders which re-fetches automatically.
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.formLoading = false;
         state.formError = action.payload;
       });
 
-    // ── updateOrder ──────────────────────────
+    // updateOrder
     builder
       .addCase(updateOrder.pending, (state) => {
         state.formLoading = true;
@@ -168,7 +158,6 @@ const orderSlice = createSlice({
       })
       .addCase(updateOrder.fulfilled, (state, action) => {
         state.formLoading = false;
-        // Update the order in the list if it happens to be loaded already
         const index = state.orders.findIndex((o) => o._id === action.payload._id);
         if (index !== -1) state.orders[index] = action.payload;
       })
@@ -177,13 +166,12 @@ const orderSlice = createSlice({
         state.formError = action.payload;
       });
 
-    // ── deleteOrder ──────────────────────────
+    // deleteOrder
     builder
       .addCase(deleteOrder.pending, (state) => {
         state.error = null;
       })
       .addCase(deleteOrder.fulfilled, (state, action) => {
-        // Remove deleted order from the list instantly (optimistic update)
         state.orders = state.orders.filter((o) => o._id !== action.payload);
         state.totalOrders = Math.max(0, state.totalOrders - 1);
       })

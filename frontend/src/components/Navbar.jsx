@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
 import { fetchOrders, setStatusFilter } from '../redux/slices/orderSlice';
@@ -9,25 +9,32 @@ const Navbar = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
 
-  // When "My Orders" is clicked, always reset filter + re-fetch from page 1
-  // This ensures the list refreshes even if the user is already on /orders
   const handleMyOrders = () => {
     dispatch(setStatusFilter(''));
     dispatch(fetchOrders({ page: 1, limit: 5, status: '' }));
     navigate('/orders');
   };
 
+  const isOrdersActive = location.pathname === '/orders';
+
+  const navLinkClass = ({ isActive }) =>
+    isActive ? `${styles.navBtn} ${styles.navBtnActive}` : styles.navBtn;
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbarBrand}>
-        <Link to="/">Order Management System</Link>
+        <NavLink to="/" className={styles.brandLink}>
+          Order Management System
+        </NavLink>
       </div>
+
       <div className={styles.navbarLinks}>
         {isAuthenticated ? (
           <>
@@ -35,17 +42,23 @@ const Navbar = () => {
               Hello, {user?.name || 'User'}
             </span>
 
-            {/* Button instead of Link so we can dispatch + navigate together */}
-            <button onClick={handleMyOrders} className={styles.navBtn}>
+            <button
+              onClick={handleMyOrders}
+              className={`${styles.navBtn} ${isOrdersActive ? styles.navBtnActive : ''}`}
+            >
               My Orders
             </button>
 
-            <Link
+            <NavLink
               to="/orders/new"
-              className={`${styles.navBtn} ${styles.navBtnPrimary}`}
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.navBtn} ${styles.navBtnPrimary} ${styles.navBtnActive}`
+                  : `${styles.navBtn} ${styles.navBtnPrimary}`
+              }
             >
               + Create Order
-            </Link>
+            </NavLink>
 
             <button
               onClick={handleLogout}
@@ -56,15 +69,17 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <Link to="/login" className={styles.navBtn}>
-              Login
-            </Link>
-            <Link
+            <NavLink to="/login" className={navLinkClass}>Login</NavLink>
+            <NavLink
               to="/signup"
-              className={`${styles.navBtn} ${styles.navBtnPrimary}`}
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.navBtn} ${styles.navBtnPrimary} ${styles.navBtnActive}`
+                  : `${styles.navBtn} ${styles.navBtnPrimary}`
+              }
             >
               Sign Up
-            </Link>
+            </NavLink>
           </>
         )}
       </div>

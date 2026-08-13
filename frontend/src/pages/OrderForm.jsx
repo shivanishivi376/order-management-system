@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 import {
   createOrder,
   updateOrder,
@@ -114,10 +115,20 @@ const OrderForm = () => {
 
     if (isEditMode) {
       const result = await dispatch(updateOrder({ orderId: id, formData: data }));
-      if (!result.error) navigate('/orders');
+      if (!result.error) {
+        toast.success('Order updated successfully!');
+        navigate('/orders');
+      } else {
+        toast.error(result.payload || 'Failed to update order.');
+      }
     } else {
       const result = await dispatch(createOrder(data));
-      if (!result.error) navigate('/orders');
+      if (!result.error) {
+        toast.success('Order created successfully!');
+        navigate('/orders');
+      } else {
+        toast.error(result.payload || 'Failed to create order.');
+      }
     }
   };
 
@@ -136,10 +147,6 @@ const OrderForm = () => {
             {isEditMode
               ? 'Update the details of your order below.'
               : 'Fill in the details to place a new order.'}
-          </p>
-          {/* Required field legend */}
-          <p className={styles.requiredNote}>
-            Fields marked <span className={styles.required}>*</span> are required.
           </p>
         </div>
 

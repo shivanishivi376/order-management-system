@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 import {
   fetchOrders,
   deleteOrder,
@@ -8,6 +9,7 @@ import {
 } from '../redux/slices/orderSlice';
 import OrderCard from '../components/OrderCard';
 import ConfirmModal from '../components/ConfirmModal';
+import OrderCardSkeleton from '../components/OrderCardSkeleton';
 import styles from './OrderList.module.css';
 
 const STATUS_OPTIONS = ['', 'Pending', 'Shipped', 'Delivered', 'Cancelled'];
@@ -51,8 +53,13 @@ const OrderList = () => {
   };
 
   // Step 2a: user confirms in the modal → actually delete
-  const handleConfirmDelete = () => {
-    dispatch(deleteOrder(orderToDelete));
+  const handleConfirmDelete = async () => {
+    const result = await dispatch(deleteOrder(orderToDelete));
+    if (!result.error) {
+      toast.success('Order deleted.');
+    } else {
+      toast.error(result.payload || 'Failed to delete order.');
+    }
     setModalOpen(false);
     setOrderToDelete(null);
   };
@@ -107,8 +114,12 @@ const OrderList = () => {
         </select>
       </div>
 
-      {/* Loading */}
-      {loading && <div className={styles.loading}>Loading your orders...</div>}
+      {/* Loading — show skeleton cards instead of plain text */}
+      {loading && (
+        <div>
+          {[1, 2, 3].map((n) => <OrderCardSkeleton key={n} />)}
+        </div>
+      )}
 
       {/* Error */}
       {!loading && error && (

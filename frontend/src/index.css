@@ -18,3 +18,13 @@ a {
 ul {
   list-style: none;
 }
+
+/* Page fade-in — applied to the main content wrapper in App.jsx */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pageWrapper {
+  animation: pageFadeIn 0.22s ease;
+}
