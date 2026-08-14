@@ -2,6 +2,11 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
+const toSafeUser = (user) => {
+    const { password, ...safeUser } = user.toObject();
+    return safeUser;
+};
+
 export const registeruser = async (data) => {
     const isexisting = await User.findOne({ email: data.email });
     if (isexisting) {
@@ -22,11 +27,12 @@ export const registeruser = async (data) => {
         expiresIn: "1d",
     });
 
-    return { user, token };
+    return { user: toSafeUser(user), token };
 };
 
 export const loginuser = async (email, password) => {
-    const user = await User.findOne({ email });
+    // Password is hidden by default in the schema and is loaded only to verify login.
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
         const err = new Error("user not found");
         err.statusCode = 404;
@@ -44,5 +50,5 @@ export const loginuser = async (email, password) => {
         expiresIn: "1d",
     });
 
-    return { user, token };
+    return { user: toSafeUser(user), token };
 };
