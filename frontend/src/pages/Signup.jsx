@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../redux/slices/authSlice';
 import axiosInstance from '../api/axiosInstance';
 import styles from './Auth.module.css';
 
@@ -9,9 +7,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,14 +19,10 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post('/auth/signup', formData);
-      // Auto-login: backend returns token on signup, save it and go straight to orders
-      // User sees the full app (navbar, orders) immediately — no separate login step
-      dispatch(setCredentials({
-        user: response.data.user,
-        token: response.data.token,
-      }));
-      navigate('/orders');
+      await axiosInstance.post('/auth/signup', formData);
+      navigate('/login', {
+        state: { message: 'Account created successfully. Please log in.' },
+      });
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong during signup');
     } finally {

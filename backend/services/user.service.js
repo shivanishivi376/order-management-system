@@ -22,26 +22,21 @@ export const registeruser = async (data) => {
         password: hashpass,
     });
 
-    // Sign a token immediately so the frontend can auto-login after signup
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-    });
-
-    return { user: toSafeUser(user), token };
+    return toSafeUser(user);
 };
 
 export const loginuser = async (email, password) => {
     // Password is hidden by default in the schema and is loaded only to verify login.
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-        const err = new Error("user not found");
-        err.statusCode = 404;
+        const err = new Error("Invalid email or password");
+        err.statusCode = 401;
         throw err;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-        const err = new Error("invalid password");
+        const err = new Error("Invalid email or password");
         err.statusCode = 401;
         throw err;
     }

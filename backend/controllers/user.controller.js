@@ -6,12 +6,11 @@ const router = express.Router();
 
 router.post("/signup", validateregisteruser, async (req, res, next) => {
     try {
-        const { user, token } = await registeruser(req.body);
+        const user = await registeruser(req.body);
         res.status(201).json({
             success: true,
             message: "User registered successfully",
             user,
-            token,
         });
     } catch (err) {
         next(err);
