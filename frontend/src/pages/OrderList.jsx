@@ -38,7 +38,7 @@ const OrderList = () => {
 
   const handleFilterChange = (e) => {
     dispatch(setStatusFilter(e.target.value));
-    dispatch(fetchOrders({ page: 1, limit: 5, status: e.target.value }));
+    // dispatch(fetchOrders({ page: 1, limit: 5, status: e.target.value }));
   };
 
   const handlePageChange = (newPage) => {
