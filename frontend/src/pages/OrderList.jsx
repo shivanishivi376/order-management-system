@@ -79,7 +79,7 @@ const OrderList = () => {
     return () => clearTimeout(timeoutId);
   }, [dispatch, filterForm.productNameFilter, productNameFilter]);
 
-  // Min/max values change for every typed digit, so fetch once after typing stops.
+  // Apply the completed price range once after the user stops typing.
   useEffect(() => {
     const priceHasChanged =
       filterForm.minPriceFilter !== minPriceFilter ||
@@ -119,7 +119,7 @@ const OrderList = () => {
       return;
     }
     setFilterError('');
-    // Date applies immediately. Product and price filters use their debounced effects above.
+    // Date applies immediately. Product and price use their debounced effects above.
     if (!['productNameFilter', 'minPriceFilter', 'maxPriceFilter'].includes(name)) {
       dispatch(setOrderFilters(nextFilters));
     }
