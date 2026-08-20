@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
-import { fetchOrders, setStatusFilter } from '../redux/slices/orderSlice';
+import { clearOrderFilters } from '../redux/slices/orderSlice';
 import styles from './Navbar.module.css';
 
 const Navbar = () => {
@@ -17,8 +17,8 @@ const Navbar = () => {
   };
 
   const handleMyOrders = () => {
-    dispatch(setStatusFilter(''));
-    dispatch(fetchOrders({ page: 1, limit: 5, status: '' }));
+    // OrderList's single effect owns fetching; this only resets its state.
+    dispatch(clearOrderFilters());
     navigate('/orders');
   };
 

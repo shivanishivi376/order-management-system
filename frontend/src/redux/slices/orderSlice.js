@@ -7,10 +7,13 @@ import axiosInstance from '../../api/axiosInstance';
 
 export const fetchOrders = createAsyncThunk(
   'orders/fetchOrders',
-  async ({ page = 1, limit = 5, status = '' } = {}, { rejectWithValue }) => {
+  async ({ page = 1, limit = 5, ...filters } = {}, { rejectWithValue }) => {
     try {
+      // Empty filters are omitted so the API only receives active filters.
       const params = { page, limit };
-      if (status) params.status = status;
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== '' && value !== undefined && value !== null) params[key] = value;
+      });
       const response = await axiosInstance.get('/orders', { params });
       return response.data;
     } catch (err) {
@@ -88,10 +91,33 @@ const orderSlice = createSlice({
     currentPage: 1,
     totalOrders: 0,
     statusFilter: '',
+    productNameFilter: '',
+    fromDateFilter: '',
+    toDateFilter: '',
+    minPriceFilter: '',
+    maxPriceFilter: '',
   },
   reducers: {
     setStatusFilter: (state, action) => {
       state.statusFilter = action.payload;
+      state.currentPage = 1;
+    },
+    setOrderFilters: (state, action) => {
+      Object.assign(state, action.payload);
+      // Any filter can change the result set, so always begin at page one.
+      state.currentPage = 1;
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
+    clearOrderFilters: (state) => {
+      state.statusFilter = '';
+      state.productNameFilter = '';
+      state.fromDateFilter = '';
+      state.toDateFilter = '';
+      state.minPriceFilter = '';
+      state.maxPriceFilter = '';
+      state.currentPage = 1;
     },
     clearCurrentOrder: (state) => {
       state.currentOrder = null;
@@ -181,5 +207,12 @@ const orderSlice = createSlice({
   },
 });
 
-export const { setStatusFilter, clearCurrentOrder, clearError } = orderSlice.actions;
+export const {
+  setStatusFilter,
+  setOrderFilters,
+  setCurrentPage,
+  clearOrderFilters,
+  clearCurrentOrder,
+  clearError,
+} = orderSlice.actions;
 export default orderSlice.reducer;

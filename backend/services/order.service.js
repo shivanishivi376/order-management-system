@@ -1,5 +1,42 @@
 import Order from "../models/order.model.js";
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const buildOrderQuery = (baseQuery, queryOptions = {}) => {
+    const { status, productName, fromDate, toDate, minPrice, maxPrice } = queryOptions;
+    const query = { ...baseQuery };
+
+    if (status) query.status = status;
+    if (productName?.trim()) {
+        query.productName = { $regex: escapeRegex(productName.trim()), $options: "i" };
+    }
+
+    if (fromDate || toDate) {
+        query.createdAt = {};
+        if (fromDate) query.createdAt.$gte = new Date(`${fromDate}T00:00:00.000Z`);
+        if (toDate) {
+            const nextDay = new Date(`${toDate}T00:00:00.000Z`);
+            nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+            // $lt next day includes every order made on the selected end date.
+            query.createdAt.$lt = nextDay;
+        }
+    }
+
+    if (minPrice !== undefined || maxPrice !== undefined) {
+        query.price = {};
+        if (minPrice !== undefined && minPrice !== "") query.price.$gte = Number(minPrice);
+        if (maxPrice !== undefined && maxPrice !== "") query.price.$lte = Number(maxPrice);
+    }
+
+    return query;
+};
+
+const getPagination = (queryOptions = {}) => {
+    const page = Math.max(1, Number.parseInt(queryOptions.page, 10) || 1);
+    const limit = Math.max(1, Number.parseInt(queryOptions.limit, 10) || 10);
+    return { page, limit, skip: (page - 1) * limit };
+};
+
 export const createorder = async (userId, data, imageUrl) => {
     const order = await Order.create({
         userId,
@@ -14,13 +51,8 @@ export const createorder = async (userId, data, imageUrl) => {
 };
 
 export const getorders = async (userId, queryOptions) => {
-    const { status, page = 1, limit = 10 } = queryOptions || {};
-    const query = { userId };
-    if (status) {
-        query.status = status;
-    }
-
-    const skip = (page - 1) * limit;
+    const query = buildOrderQuery({ userId }, queryOptions);
+    const { page, limit, skip } = getPagination(queryOptions);
 
     const orders = await Order.find(query)
         .populate("userId", "name email")
@@ -39,13 +71,8 @@ export const getorders = async (userId, queryOptions) => {
 };
 
 export const getallorders = async (queryOptions) => {
-    const { status, page = 1, limit = 10 } = queryOptions || {};
-    const query = {};
-    if (status) {
-        query.status = status;
-    }
-
-    const skip = (page - 1) * limit;
+    const query = buildOrderQuery({}, queryOptions);
+    const { page, limit, skip } = getPagination(queryOptions);
 
     const orders = await Order.find(query)
         .populate("userId", "name email")
