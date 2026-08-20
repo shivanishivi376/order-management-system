@@ -79,6 +79,22 @@ const OrderList = () => {
     return () => clearTimeout(timeoutId);
   }, [dispatch, filterForm.productNameFilter, productNameFilter]);
 
+  // Min/max values change for every typed digit, so fetch once after typing stops.
+  useEffect(() => {
+    const priceHasChanged =
+      filterForm.minPriceFilter !== minPriceFilter ||
+      filterForm.maxPriceFilter !== maxPriceFilter;
+    if (!priceHasChanged) return undefined;
+
+    const timeoutId = setTimeout(() => {
+      dispatch(setOrderFilters({
+        minPriceFilter: filterForm.minPriceFilter,
+        maxPriceFilter: filterForm.maxPriceFilter,
+      }));
+    }, 350);
+    return () => clearTimeout(timeoutId);
+  }, [dispatch, filterForm.minPriceFilter, filterForm.maxPriceFilter, minPriceFilter, maxPriceFilter]);
+
   const handleFilterChange = (e) => {
     dispatch(setStatusFilter(e.target.value));
   };
@@ -103,8 +119,10 @@ const OrderList = () => {
       return;
     }
     setFilterError('');
-    // Date and price apply immediately; product name uses the debounced effect above.
-    if (name !== 'productNameFilter') dispatch(setOrderFilters(nextFilters));
+    // Date applies immediately. Product and price filters use their debounced effects above.
+    if (!['productNameFilter', 'minPriceFilter', 'maxPriceFilter'].includes(name)) {
+      dispatch(setOrderFilters(nextFilters));
+    }
   };
 
   const handleClearFilters = () => {
